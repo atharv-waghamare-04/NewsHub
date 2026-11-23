@@ -1,0 +1,222 @@
+
+### ==========================================
+### NEWSHUB ADMIN AUTHENTICATION & AUTHORIZATION
+### ==========================================
+
+@baseUrl = http://localhost:5000
+
+@adminEmail = {{$dotenv ADMIN_EMAIL}}
+@adminPassword = {{$dotenv ADMIN_PASSWORD}}
+
+@userEmail = {{$dotenv TEST_USER_EMAIL}}
+@userPassword = {{$dotenv TEST_USER_PASSWORD}}
+
+@adminToken = {{adminLogin.response.body.token}}
+@userToken = {{userLogin.response.body.token}}
+
+
+
+### 1. ADMIN LOGIN
+# Expected: 200
+# Saves administrator JWT automatically.
+
+# @name adminLogin
+POST {{baseUrl}}/api/admin/login-admin
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+
+### 2. NORMAL USER LOGIN
+# Expected: 200
+# Saves normal user JWT automatically.
+
+# @name userLogin
+POST {{baseUrl}}/api/user/login-admin
+Content-Type: application/json
+
+{
+  "email": "l.ot.stu.p.i.dk.ael.y@gmail.com",
+  "password": "{{userPassword}}"
+}
+
+
+### ==========================================
+### ADMIN REGISTRATION SECURITY
+### ==========================================
+
+### 3. PUBLIC ADMIN REGISTRATION
+# Expected: 403
+POST {{baseUrl}}/api/admin/create-new-admin
+Content-Type: application/json
+
+{
+  "name": "Unauthorized Admin",
+  "email": "unauthorized@example.com",
+  "mobile_no": "9876543210",
+  "password": "TestPassword123!"
+}
+
+
+### ==========================================
+### AUTHENTICATION TESTS
+### ==========================================
+
+### 4. ACCESS WITHOUT TOKEN
+# Expected: 401
+POST {{baseUrl}}/api/news/fetch-all-news
+Content-Type: application/json
+
+{
+  "category_name": "All",
+  "search": "",
+  "skip": 0
+}
+
+
+### 5. ACCESS WITH INVALID TOKEN
+# Expected: 401
+POST {{baseUrl}}/api/news/fetch-all-news
+Content-Type: application/json
+Authorization: Bearer invalid.fake.token
+
+{
+  "category_name": "All",
+  "search": "",
+  "skip": 0
+}
+
+
+### ==========================================
+### ROLE AUTHORIZATION TESTS
+### ==========================================
+
+### 6. NORMAL USER ACCESSING ADMIN NEWS ROUTE
+# Expected: 403
+POST {{baseUrl}}/api/news/fetch-all-news
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+{
+  "category_name": "All",
+  "search": "",
+  "skip": 0
+}
+
+
+### 7. ADMIN ACCESSING ADMIN NEWS ROUTE
+# Expected: Successful controller response
+POST {{baseUrl}}/api/news/fetch-all-news
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "category_name": "All",
+  "search": "",
+  "skip": 0
+}
+
+
+### ==========================================
+### ADMIN NEWS MANAGEMENT
+### ==========================================
+
+### 8. CREATE NEWS
+# Uploads an image and creates a news article.
+
+# @name createNews
+POST {{baseUrl}}/api/news/create-new-news
+Authorization: Bearer {{adminToken}}
+Content-Type: multipart/form-data; boundary=NewsBoundary
+
+--NewsBoundary
+Content-Disposition: form-data; name="title"
+
+NewsHub Security Test Article
+--NewsBoundary
+Content-Disposition: form-data; name="description"
+
+Testing administrator news publishing functionality.
+--NewsBoundary
+Content-Disposition: form-data; name="category_name"
+
+Technology
+
+--NewsBoundary
+Content-Disposition: form-data; name="author"
+
+NewsHub Admin
+--NewsBoundary
+Content-Disposition: form-data; name="content"
+
+[{"headline":"NewsHub Security Testing","description":"This is a test article created by an authorized administrator.","category":"Technology"}]
+--NewsBoundary
+Content-Disposition: form-data; name="news-image"; filename="test-news.jpg"
+Content-Type: image/jpeg
+
+< ./statics/uploads/test-news.jpg
+--NewsBoundary--
+
+
+### 9. UPDATE NEWS
+# Automatically gets ID from CREATE NEWS response.
+
+@newsId = {{createNews.response.body.data._id}}
+
+PUT {{baseUrl}}/api/news/update-exist-news
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "_id": "{{newsId}}",
+  "title": "NewsHub Security Test Article Updated",
+  "description": "Testing administrator news update functionality.",
+  "category_name": "Technology",
+  "author": "NewsHub Admin",
+  "content": [
+    {
+      "headline": "Updated Security Testing",
+      "description": "This article has been updated by the administrator."
+    }
+  ],
+  "status": "Active"
+}
+
+
+### 10. DELETE NEWS
+# Automatically uses the same MongoDB ID.
+
+DELETE {{baseUrl}}/api/news/delete-specific-news
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "_id": "{{newsId}}"
+}
+
+#=========================================
+### RAZORPAY SUBSCRIPTION WEBHOOK TEST
+#=========================================
+
+POST https://kept-implicit-had.ngrok-free.dev/api/subscription/webhook
+Content-Type: application/json
+
+{}
+
+#========================================
+### FETCH ALL PAID NEWS TEST
+#=========================================
+
+POST {{baseUrl}}/api/news/fetch-all-paid-news
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+{
+  "token_id": "86f426500aff970d9d80bbe7f4c5aaf17cae6c0cfc7c428f52e2b59c42f0f81d",
+  "category_name": "All",
+  "search": "",
+  "skip": 0
+}

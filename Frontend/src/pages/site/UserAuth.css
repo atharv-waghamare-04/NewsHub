@@ -1,0 +1,26 @@
+.user-auth-page a { text-decoration: none; }
+.user-auth-page .user-auth-brand-link { color: #fff; }
+.user-auth-page .auth-mobile-brand.user-auth-brand-link { color: #193138; }
+.user-auth-page .user-auth-back { width: fit-content; color: #466268; }
+.user-auth-page .auth-tabs a { display: grid; place-items: center; min-height: 42px; border-radius: 7px; color: #7a8989; font-size: 13px; font-weight: 650; }
+.user-auth-page .auth-tabs a.active { color: #1a3438; background: #fff; box-shadow: 0 2px 7px rgba(26, 52, 56, .09); }
+.user-auth-page .auth-switch a { color: #37615b; font-size: 12px; font-weight: 750; }
+.user-auth-page .auth-switch a:hover, .user-auth-page .user-auth-back:hover { text-decoration: underline; }
+.user-auth-page .auth-switch a span { margin-left: 3px; }
+.user-auth-page .auth-form-meta a, .user-auth-page .user-auth-reset-back { color: #37615b; font-size: 12px; font-weight: 750; }
+.user-auth-page .auth-form-meta a:hover, .user-auth-page .user-auth-reset-back:hover { text-decoration: underline; }
+.user-auth-page .user-auth-reset-back { display: inline-block; margin: 25px 0 25px; }
+.user-auth-page .auth-submit > span:last-child { font-size: 22px; line-height: 1; }
+.user-auth-page .auth-visibility { right: 9px; width: 42px; font-size: 11px; font-weight: 750; }
+.user-auth-page .auth-input-wrap input[name="password"], .user-auth-page .auth-input-wrap input[name="confirm_password"] { padding-right: 58px; }
+.user-auth-page .auth-field-note { margin: -5px 0 2px; }
+.user-auth-page .user-auth-notice, .user-auth-page .user-auth-error { margin: 22px 0 -6px; padding: 11px 13px; border-radius: 8px; font-size: 12px; line-height: 1.5; }
+.user-auth-page .user-auth-notice { border: 1px solid #dce9d8; background: #f3f8ef; color: #4f7452; }
+.user-auth-page .user-auth-error { border: 1px solid #efd9d2; background: #fff8f5; color: #a95348; }
+.user-auth-page .user-auth-email-line { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border: 1px solid #e2ebe5; border-radius: 8px; background: #f5f8f4; color: #48635a; font-size: 12px; }
+.user-auth-page .user-auth-email-line strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.user-auth-page .user-auth-email-line button, .user-auth-page .user-auth-resend { padding: 0; border: 0; background: none; color: #4b7255; font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; white-space: nowrap; }
+.user-auth-page .user-auth-resend { align-self: flex-start; margin-top: -7px; }
+.user-auth-page .user-auth-email-line button:hover, .user-auth-page .user-auth-resend:hover { text-decoration: underline; }
+.user-auth-page .user-auth-resend:disabled { cursor: wait; opacity: .6; }
+.user-auth-page a:focus-visible, .user-auth-page button:focus-visible { outline: 3px solid #9bc265; outline-offset: 3px; }
