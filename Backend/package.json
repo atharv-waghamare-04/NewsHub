@@ -11,7 +11,7 @@
     "create-admin": "node scripts/createAdmin.js",
     "dev": "nodemon index.js",
     "migrate:payment-ledger": "node scripts/migrateSubscriptionPayments.js",
-    "migrate:auth-security": "node scripts/migrateAuthSecurity.js",
+    "migrate:auth-security": "node scripts/migrateAuthSecurity.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
