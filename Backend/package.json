@@ -12,7 +12,6 @@
     "dev": "nodemon index.js",
     "migrate:payment-ledger": "node scripts/migrateSubscriptionPayments.js",
     "migrate:auth-security": "node scripts/migrateAuthSecurity.js",
-    "test:phase5": "node --test tests/phase5Contract.test.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

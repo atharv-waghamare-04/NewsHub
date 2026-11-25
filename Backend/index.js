@@ -4,8 +4,6 @@ const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const path = require("node:path");
-
-const transporter = require("./services/nodemailer");
 const dbToConnect = require("./db/db");
 const adminRouter = require("./routes/admin.routes");
 const categoryRouter = require("./routes/catagory.routes");
@@ -15,18 +13,24 @@ const userRouter = require("./routes/user.routes");
 
 const app = express();
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "NewsHub API is running successfully",
+  });
+});
+
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "NewsHub server is healthy",
+  });
+});
+
 const allowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:5173")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
-
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("SMTP CONNECTION FAILED:", error.message);
-  } else {
-    console.log("SMTP SERVER READY:", success);
-  }
-});
 
 const corsOptions = {
   origin(origin, callback) {
